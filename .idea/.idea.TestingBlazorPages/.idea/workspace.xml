@@ -12,34 +12,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1822110f-4058-4b7a-bc5d-5f2b36b832bf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Application.Tests/RedBinder.Application.Tests.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Domain/Photo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/App.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Layout/MainLayout.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Layout/MainLayout.razor.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Layout/NavMenu.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Layout/NavMenu.razor.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Pages/Counter.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Pages/Error.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Pages/Home.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Pages/RecipeOverview.razor.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Pages/Test.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Pages/Weather.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/Routes.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Components/_Imports.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/Properties/launchSettings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/RedBinder.Web.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/appsettings.Development.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/appsettings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/wwwroot/app.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/wwwroot/bootstrap/bootstrap.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/wwwroot/bootstrap/bootstrap.min.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.Web/wwwroot/favicon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RedBinder.sln" afterDir="false" />
-    </list>
+    <list default="true" id="1822110f-4058-4b7a-bc5d-5f2b36b832bf" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,6 +21,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -185,13 +159,23 @@
       <updated>1714501755595</updated>
       <workItem from="1714501756832" duration="1052000" />
       <workItem from="1714511418082" duration="3950000" />
-      <workItem from="1714845487072" duration="334000" />
+      <workItem from="1714845487072" duration="1195000" />
     </task>
+    <task id="LOCAL-00001" summary="skeleton of the project">
+      <option name="closed" value="true" />
+      <created>1714869327064</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1714869327064</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -205,5 +189,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="skeleton of the project" />
+    <option name="LAST_COMMIT_MESSAGE" value="skeleton of the project" />
   </component>
 </project>

@@ -1,18 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedBinder.Web", "RedBinder.Web\RedBinder.Web.csproj", "{270F0467-5D36-40B0-A71F-78CAB9B767A0}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedBinder.Web", "RedBinder.Web\RedBinder.Web.csproj", "{270F0467-5D36-40B0-A71F-78CAB9B767A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedBinder.Domain", "RedBinder.Domain\RedBinder.Domain.csproj", "{B728954A-1B08-4611-91F7-486766C9C94C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedBinder.Domain", "RedBinder.Domain\RedBinder.Domain.csproj", "{B728954A-1B08-4611-91F7-486766C9C94C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedBinder.Console", "RedBinder.Console\RedBinder.Console.csproj", "{8C35206F-BD68-4502-B421-DAF0A82D8A63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedBinder.Console", "RedBinder.Console\RedBinder.Console.csproj", "{8C35206F-BD68-4502-B421-DAF0A82D8A63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedBinder.Infrastructure", "RedBinder.Infrastructure\RedBinder.Infrastructure.csproj", "{1E3F73FB-E173-4A6A-B082-2DC221F284B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedBinder.Infrastructure", "RedBinder.Infrastructure\RedBinder.Infrastructure.csproj", "{1E3F73FB-E173-4A6A-B082-2DC221F284B5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8FA23E54-3678-475E-AFEA-9E68DFAAFEDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedBinder.Application.Tests", "RedBinder.Application.Tests\RedBinder.Application.Tests.csproj", "{D16C4C1B-5C88-4D1E-9FD0-1830888ABD77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedBinder.Application.Tests", "RedBinder.Application.Tests\RedBinder.Application.Tests.csproj", "{D16C4C1B-5C88-4D1E-9FD0-1830888ABD77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedBinder.Application", "RedBinder.Application\RedBinder.Application.csproj", "{14D2A1A1-6462-4706-8B56-316327DF857C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedBinder.Application", "RedBinder.Application\RedBinder.Application.csproj", "{14D2A1A1-6462-4706-8B56-316327DF857C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1527015C-56C9-45D6-916F-F0FCABBCF965}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,7 +50,18 @@ Global
 		{14D2A1A1-6462-4706-8B56-316327DF857C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14D2A1A1-6462-4706-8B56-316327DF857C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{270F0467-5D36-40B0-A71F-78CAB9B767A0} = {1527015C-56C9-45D6-916F-F0FCABBCF965}
+		{B728954A-1B08-4611-91F7-486766C9C94C} = {1527015C-56C9-45D6-916F-F0FCABBCF965}
+		{8C35206F-BD68-4502-B421-DAF0A82D8A63} = {1527015C-56C9-45D6-916F-F0FCABBCF965}
+		{1E3F73FB-E173-4A6A-B082-2DC221F284B5} = {1527015C-56C9-45D6-916F-F0FCABBCF965}
 		{D16C4C1B-5C88-4D1E-9FD0-1830888ABD77} = {8FA23E54-3678-475E-AFEA-9E68DFAAFEDC}
+		{14D2A1A1-6462-4706-8B56-316327DF857C} = {1527015C-56C9-45D6-916F-F0FCABBCF965}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59DA2005-5DF0-426E-9887-E053B317C325}
 	EndGlobalSection
 EndGlobal
