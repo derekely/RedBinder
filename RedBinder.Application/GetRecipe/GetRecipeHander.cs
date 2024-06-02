@@ -5,20 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
+using RedBinder.Domain.Entities;
 
 namespace RedBinder.Application.GetRecipe
 {
-    public class GetRecipeRequest : IRequest<GetRecipeHander>
+    public class GetRecipeQuery : IRequest<Result<Recipe>>
     {
-        public int RecipeId { get; set; }
-
+        public int RecipeId { get; }
     }
 
-    public class GetRecipeHander : IRequestHandler<GetRecipeRequest, Task<Unit>>
+    public class GetRecipeHander : IRequestHandler<GetRecipeQuery, Result<Recipe>>
     {
-        public Task<Unit> Handle(GetRecipeRequest request, CancellationToken cancellationToken)
+        public async Task<Result<Recipe>> Handle(GetRecipeQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(Result.Success(new Recipe
+            {
+                Name = "Fruit Salad",
+                Directions = "peel banana, eat banana, eat apple, eat orange",
+            }));
         }
     }
 

@@ -2,23 +2,23 @@
 
 namespace RedBinder.Domain.Entities;
 
-public class Recipe // TODO: IRecipe??
+public class Recipe
 {
-    private Recipe(List<string> ingredients, List<string> directions, Photo photo)
+    private Recipe(string name, string directions, string description)
     {
-        Ingredients = ingredients;
+        Name = name;
         Directions = directions;
-        Photo = photo;
+        Description = description;
     }
 
     // Used for EF Core
     public Recipe() { }
 
-    public List<string> Ingredients { get; set; } = null; // TODO: Ingredients clas!
-    public List<string> Directions { get; set; } = null; // TODO: think about making this into a class. EF core guards against SQL injection, but result of these?
-    public Photo Photo { get; }
-
-    // TODO: Fill this out!
-    public Result<Recipe> Create() => Result.Success(new Recipe());
-
+    public string Name { get; set; } = null!;
+    public string Directions { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    
+    public Result<Recipe> Create(string? nameString, string directions, string description) =>
+        Result.SuccessIf(nameString != null, "Name cannot be null")
+            .Map(() => new Recipe(nameString!, directions, description));
 }
