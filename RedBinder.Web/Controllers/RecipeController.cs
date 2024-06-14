@@ -12,7 +12,6 @@ namespace TestingBlazorPages.Controllers
         // GET: RecipeController
         public ActionResult Index()
         {
-            
             return View();
         }
 
@@ -20,7 +19,7 @@ namespace TestingBlazorPages.Controllers
         public async Task<ActionResult> Details(int id)
         {
             // example of calling a mediator
-            var response = await _mediator.Send(new GetRecipeQuery { RecipeId = 1 });
+            var response = await _mediator.Send(new GetRecipeQuery(1));
             return View();
         }
 
