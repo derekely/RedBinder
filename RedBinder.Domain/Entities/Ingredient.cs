@@ -4,21 +4,18 @@ namespace RedBinder.Domain.Entities;
 
 public class Ingredient
 {
-    private Ingredient(string name, double quantity, Measurement measurement)
+    private Ingredient(string name)
     {
         Name = name;
-        Quantity = quantity;
-        Measurement = measurement;
     }
     
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public double Quantity { get; set; }
-    public Measurement Measurement { get; set; }
+    public int Id { get; }
+    public string Name { get; }
     
+    // Used for EF Core
     public Ingredient() { }
     
-    public static Result<Ingredient> Create(string name, double quantity, Measurement measurement) =>
+    public static Result<Ingredient> Create(string name) =>
         Result.SuccessIf(!string.IsNullOrEmpty(name), "Name cannot be null")
-            .Map(() => new Ingredient(name, quantity, measurement));
+            .Map(() => new Ingredient(name));
 }

@@ -10,7 +10,7 @@ public class RepositoryService : IRepositoryService
 {
     public Task<Result<List<Recipe>>> GetRecipesAsync()
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(Result.Success(new List<Recipe>()));
     }
 
     public Task<Result<List<Recipe>>> GetSelectedRecipesAsync(List<int> recipeIds)
@@ -20,11 +20,10 @@ public class RepositoryService : IRepositoryService
 
     public Task<Result<Recipe>> GetRecipeAsync(int recipeId)
     {
-        throw new System.NotImplementedException(); 
-        //return Task.FromResult(Recipe.Create("Test Recipe",  };
+        return Task.FromResult(Recipe.Create("Test Recipe", "Test Directions", "Test description", new()));
     }
 
-    public Task<Result<Recipe>> CreateRecipeAsync(Recipe recipe)
+    public Task<Result> CreateRecipeAsync(Recipe recipe)
     {
         throw new System.NotImplementedException();
     }

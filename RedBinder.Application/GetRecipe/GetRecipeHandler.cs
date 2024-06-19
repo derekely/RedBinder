@@ -10,6 +10,5 @@ public record GetRecipeQuery(int RecipeId) : IRequest<Result<Recipe>>;
 
 public class GetRecipeHandler(IRepositoryService repositoryService) : IRequestHandler<GetRecipeQuery, Result<Recipe>>
 {
-    private readonly IRepositoryService _repositoryService = repositoryService;
-    public async Task<Result<Recipe>> Handle(GetRecipeQuery request, CancellationToken cancellationToken) => await _repositoryService.GetRecipeAsync(request.RecipeId);
+    public async Task<Result<Recipe>> Handle(GetRecipeQuery request, CancellationToken cancellationToken) => await repositoryService.GetRecipeAsync(request.RecipeId);
 }

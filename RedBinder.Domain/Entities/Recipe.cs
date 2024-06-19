@@ -1,25 +1,26 @@
 ﻿using System.Collections.Generic;
 using CSharpFunctionalExtensions;
+using RedBinder.Domain.ValueObjects;
 
 namespace RedBinder.Domain.Entities;
 
 public class Recipe
 {
-    private Recipe(string name, string directions, string description, Dictionary<Measurement, List<Ingredient> > ingredientsAndAmount)
+    private Recipe(string name, string directions, string description, List<ShoppingItem> shoppingItems)
     {
         Name = name;
         Directions = directions;
         Description = description;
-        IngredientsAndAmount = ingredientsAndAmount;
+        ShoppingItems = shoppingItems;
     }
     
-    public string Name { get; set; } = null!;
-    public string Directions { get; set; } = null!;
-    public string Description { get; set; } = null!;
-    public Dictionary<Measurement, List<Ingredient>> IngredientsAndAmount { get; set; } = new();
+    public string Name { get; }
+    public string Directions { get; }
+    public string Description { get; }
+    public List<ShoppingItem> ShoppingItems { get; }
     
-    
-    public Result<Recipe> Create(string? nameString, string directions, string description, List<Ingredient> ingredients) => //TODO think about this, with the dictionary
+    public static Result<Recipe> Create(string? nameString, string directions, string description, List<ShoppingItem> shoppingItems) =>
         Result.SuccessIf(nameString != null, "Name cannot be null")
-            .Map(() => new Recipe(nameString!, directions, description, new()));
+            .Ensure(() => shoppingItems.Count > 0, "Recipe must have at least one ingredient")
+            .Map(() => new Recipe(nameString!, directions, description, shoppingItems));
 }

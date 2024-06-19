@@ -7,15 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Verbs\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="MediatR" Version="12.2.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\RedBinder.Application\RedBinder.Application.csproj" />
+      <ProjectReference Include="..\RedBinder.Infrastructure\RedBinder.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
