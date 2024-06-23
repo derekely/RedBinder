@@ -21,6 +21,4 @@ public record Measurement
         Result.SuccessIf(!string.IsNullOrEmpty(name), "Name cannot be null")
             .Ensure(() => quantity > 0, "Quantity must be greater than 0")
             .Map(() => new Measurement(name, quantity));
-    
-    
 }

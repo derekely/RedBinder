@@ -1,34 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using CSharpFunctionalExtensions;
+using RedBinder.Domain.Entities;
 
 namespace RedBinder.Domain.ValueObjects;
 
-public record ShoppingCart(ImmutableList<ShoppingItem> shoppingItems)
+public record ShoppingCart(ImmutableList<ShoppingItem> ShoppingItems)
 {
-    // Properties
-    public ImmutableList<ShoppingItem> ShoppingItems { get; private set; } = shoppingItems;
-
     // Methods
     public static Result<ShoppingCart> Create(List<ShoppingItem> shoppingItems) =>
         Result.SuccessIf(shoppingItems.Count > 0, "Shopping cart must have at least one item")
             .Map(shoppingItems.ToImmutableList)
             .Map(immutableShoppingList => new ShoppingCart(immutableShoppingList));
     
-    public ShoppingCart AddItem(ShoppingItem shoppingItem)
+    public Result<ShoppingCart> AddItem(Ingredient ingredient, Measurement measurement)
     {
-        // See if we already have that item in the cart,
-        // if so, combine the measurements
-        // If we don't simply add it to the list in the shopping cart
-        
-        if (ShoppingItems.Any(shoppingItem => shoppingItem.Ingredient.Name == shoppingItem.Ingredient.Name))
-        {
-            ShoppingItem existingItem = ShoppingItems.First(shopItem => shopItem.Ingredient.Name == shoppingItem.Ingredient.Name);
-            // existingItem.Combine(shoppingItem.Ingredient, shoppingItem.Measurements.First());
-        }
-        
-        return new ShoppingCart(ShoppingItems.Add(shoppingItem)); // not this
+        ShoppingItem? existingItem = ShoppingItems.FirstOrDefault(shopItem => string.Equals(shopItem.Ingredient.Name, ingredient.Name, StringComparison.CurrentCultureIgnoreCase));
+    
+        List<ShoppingItem> newShoppingList = [..ShoppingItems];
+    
+        return existingItem != null
+            ? existingItem.Combine(ingredient, measurement).Bind(combinedItem => Create([..newShoppingList.Where(item => item != existingItem), combinedItem])) // Same Ingredient
+            : ShoppingItem.Create(ingredient, [measurement]).Bind(shoppingItem => Create([..newShoppingList, shoppingItem])); // Different Ingredient
     }
 }
