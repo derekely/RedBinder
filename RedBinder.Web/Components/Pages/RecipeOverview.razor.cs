@@ -1,4 +1,5 @@
 using RedBinder.Domain.Entities;
+using RedBinder.Domain.ValueObjects;
 
 namespace TestingBlazorPages.Components.Pages;
 

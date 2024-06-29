@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using RedBinder.Domain.Entities;
+using RedBinder.Domain.ValueObjects;
 
 namespace RedBinder.Application.ServiceInterface;
 

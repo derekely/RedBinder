@@ -5,6 +5,7 @@ using CSharpFunctionalExtensions;
 using MediatR;
 using RedBinder.Application.ServiceInterface;
 using RedBinder.Domain.Entities;
+using RedBinder.Domain.ValueObjects;
 
 namespace RedBinder.Application.GetRecipe;
 

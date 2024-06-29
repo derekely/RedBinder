@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using CSharpFunctionalExtensions;
-using RedBinder.Domain.ValueObjects;
+using RedBinder.Domain.Entities;
 
-namespace RedBinder.Domain.Entities;
+namespace RedBinder.Domain.ValueObjects;
 
 public class Recipe
 {
@@ -11,6 +11,14 @@ public class Recipe
         Name = name;
         Directions = directions;
         Description = description;
+        ShoppingItems = shoppingItems;
+    }
+    
+    public Recipe(RecipeDetails recipeDetails, List<ShoppingItem> shoppingItems)
+    {
+        Name = recipeDetails.Name;
+        Directions = recipeDetails.Directions;
+        Description = recipeDetails.Description;
         ShoppingItems = shoppingItems;
     }
     

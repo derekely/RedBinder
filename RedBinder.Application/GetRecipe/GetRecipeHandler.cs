@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using RedBinder.Application.ServiceInterface;
 using RedBinder.Domain.Entities;
+using RedBinder.Domain.ValueObjects;
 
 namespace RedBinder.Application.GetRecipe;
 public record GetRecipeQuery(int RecipeId) : IRequest<Result<Recipe>>; 
