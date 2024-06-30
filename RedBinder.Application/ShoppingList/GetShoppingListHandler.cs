@@ -9,9 +9,9 @@ using RedBinder.Domain.ValueObjects;
 
 namespace RedBinder.Application.ShoppingList;
 
-public record GetShoppingListQuery(List<int> SelectedRecipes) : IRequest<Result<List<Recipe>>>;
+public record GetShoppingListQuery(List<int> SelectedRecipes) : IRequest<Result<ShoppingCart>>;
 
-public class GetShoppingListHandler(IRepositoryService repositoryService) : IRequestHandler<GetShoppingListQuery, Result<List<Recipe>>>
+public class GetShoppingListHandler(IRepositoryService repositoryService) : IRequestHandler<GetShoppingListQuery, Result<ShoppingCart>>
 {
-    public async Task<Result<List<Recipe>>> Handle(GetShoppingListQuery request, CancellationToken cancellationToken) => await repositoryService.GetSelectedRecipesAsync(request.SelectedRecipes);
+    public async Task<Result<ShoppingCart>> Handle(GetShoppingListQuery request, CancellationToken cancellationToken) => await repositoryService.GetSelectedRecipesAsync(request.SelectedRecipes);
 }

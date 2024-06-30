@@ -15,6 +15,6 @@ public record RecipeJoin
     public Ingredient Ingredient { get; set; }
     public Measurement Measurement { get; set; }
     
-    // Constructors
+    // Constructors - I think it is used by EF Core
     public RecipeJoin() { }
 }

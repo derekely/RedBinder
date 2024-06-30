@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics.Metrics;
 using System.Linq;
 using CSharpFunctionalExtensions;
 using RedBinder.Domain.Entities;
@@ -13,7 +12,7 @@ public record ShoppingCart(ImmutableList<ShoppingItem> ShoppingItems)
     // Methods
     public static Result<ShoppingCart> Create(List<ShoppingItem> shoppingItems) =>
         Result.SuccessIf(shoppingItems.Count > 0, "Shopping cart must have at least one item")
-            .Map(shoppingItems.ToImmutableList)
+            .Map(shoppingItems.ToImmutableList) // TODO: have this join the items together
             .Map(immutableShoppingList => new ShoppingCart(immutableShoppingList));
     
     public Result<ShoppingCart> AddItem(Ingredient ingredient, Measurement measurement)

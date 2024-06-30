@@ -9,9 +9,9 @@ using RedBinder.Domain.ValueObjects;
 
 namespace RedBinder.Application.GetRecipe;
 
-public record GetAllRecipeQuery : IRequest<Result<List<Recipe>>>;
+public record GetAllRecipeQuery : IRequest<Result<List<RecipeDetails>>>;
 
-public class GetAllRecipeHandler(IRepositoryService repositoryService) : IRequestHandler<GetAllRecipeQuery, Result<List<Recipe>>>
+public class GetAllRecipeHandler(IRepositoryService repositoryService) : IRequestHandler<GetAllRecipeQuery, Result<List<RecipeDetails>>>
 {
-    public async Task<Result<List<Recipe>>> Handle(GetAllRecipeQuery request, CancellationToken cancellationToken) => await repositoryService.GetRecipesAsync();
+    public async Task<Result<List<RecipeDetails>>> Handle(GetAllRecipeQuery request, CancellationToken cancellationToken) => await repositoryService.GetRecipesAsync();
 }
