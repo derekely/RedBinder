@@ -7,6 +7,6 @@ public class DatabaseContext : DbContext
 {
     public DbSet<RecipeJoin> RecipeJoins { get; set; }
     public DbSet<RecipeDetails> RecipeDetails { get; set; }
-    // public DbSet<Measurement> Measurements { get; set; } // Do I need these?
-    // public DbSet<Ingredient> Ingredients { get; set; } // Do I need these?
+    public DbSet<Measurement> Measurements { get; set; }
+    public DbSet<Ingredient> Ingredients { get; set; }
 }

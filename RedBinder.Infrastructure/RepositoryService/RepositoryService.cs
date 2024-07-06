@@ -13,8 +13,6 @@ namespace RedBinder.Infrastructure.RepositoryService;
 
 public class RepositoryService(DatabaseContext.DatabaseContext databaseContext) : IRepositoryService
 {
-    private readonly DatabaseContext.DatabaseContext _databaseContext = databaseContext;
-    
     // Done
     public async Task<Result<List<RecipeDetails>>> GetRecipesAsync() =>
         await GetFromDatabase(context => context.RecipeDetails
@@ -43,12 +41,50 @@ public class RepositoryService(DatabaseContext.DatabaseContext databaseContext) 
 
     public async Task<Result> CreateRecipeAsync(Recipe recipe)
     {
-        throw new NotImplementedException(); // TODO: Figure out how to save to database
+        return await SaveToDatabase(async context =>
+        {
+            //Details
+            RecipeDetails recipeDetails = recipe.RecipeDetails;
+            await context.RecipeDetails.AddAsync(recipeDetails);
+            await context.SaveChangesAsync();
+        
+            // Shopping Items
+            foreach (ShoppingItem shoppingItem in recipe.ShoppingItems)
+            {
+                // We will need to ensure that stuff isn't being added that shouldn't be added.... hmmmm
+                Ingredient ingredient = shoppingItem.Ingredient;
+                await context.Ingredients.AddAsync(ingredient);
+                await context.SaveChangesAsync();
+        
+                Measurement measurement = new Measurement
+                {
+                    Name = shoppingItem.Measurements.First().Name,
+                    Quantity = shoppingItem.Measurements.First().Quantity
+                };
+                await context.Measurements.AddAsync(measurement);
+                await context.SaveChangesAsync();
+        
+                RecipeJoin recipeJoin = new RecipeJoin
+                {
+                    RecipeDetails = recipeDetails,
+                    Ingredient = ingredient,
+                    Measurement = measurement
+                };
+                await context.RecipeJoins.AddAsync(recipeJoin);
+                await context.SaveChangesAsync();
+            }
+        }, e => e.ToString());
     }
 
-    public Task<Result<Recipe>> UpdateRecipeAsync(Recipe recipe)
+    public async Task<Result<Recipe>> UpdateRecipeAsync(Recipe recipe)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); // TODO: Figure out how to save to database
+        // return await GetFromDatabase(context => context.RecipeJoins
+        //             .Include(rj => rj.Measurement)
+        //             .Include(rj => rj.Ingredient)
+        //             .Where(rj => rj.Id == recipe.RecipeDetails.Id).ToListAsync()
+        //        , e => e.ToString()) // TODO: Figure this out
+            //.Bind();
     }
 
     public Task<Result> DeleteRecipeAsync(int recipeId)
@@ -97,5 +133,38 @@ public class RepositoryService(DatabaseContext.DatabaseContext databaseContext) 
 
         return queryResult;
     }
+
+    private async Task<Result<(int ingredientId, int measurementId)>> SaveShoppingItem(ShoppingItem shoppingItem)
+    {
+       // Check for duplicates for the ingredient and measurement, if they are there then return the ids of both
+
+       Maybe<int> maybeIngredientId = await GetFromDatabase(context => context.Ingredients
+               .Where(ingredient => ingredient.Name == shoppingItem.Ingredient.Name)
+               .FirstOrDefaultAsync()
+           , e => e.ToString());
+
+       if (maybeIngredientId.HasNoValue)
+       {
+           // save it to the database. then get the id of that saved item and have it ready to be returned with the measurement id
+              var ingredientId = await SaveToDatabase(context => context.Ingredients.AddAsync(shoppingItem.Ingredient),
+                     e => e.ToString())
+                .Map(ingredient => ingredient.Id);
+       }
+
+       var measurementId = await GetFromDatabase(context => context.Measurements
+                   .Where(measurement => measurement.Name == shoppingItem.Measurements.First().Name)
+                   .FirstOrDefaultAsync()
+               , e => e.ToString())
+           .Bind(measurement =>
+           {
+               if (measurement is not null) return Result.Success(measurement.Id);
+               return SaveToDatabase(context => context.Measurements.AddAsync(shoppingItem.Measurements.First()),
+                       e => e.ToString())
+                   .Map(measurement => measurement.Id);
+           });
+
+       return (ingredientId, measurementId);
+    }
+    
     #endregion
 }
