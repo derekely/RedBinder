@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 
 namespace RedBinder.Domain.Entities;
@@ -16,6 +17,7 @@ public class RecipeDetails
     public string Name { get; set; }
     public string Directions { get; set; }
     public string Description { get; set; }
+    public ICollection<RecipeJoin> RecipeJoins { get; set; }
     
     // Used for EF Core
     public RecipeDetails() { }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 
 namespace RedBinder.Domain.Entities;
@@ -11,6 +12,7 @@ public class Ingredient
     
     public int Id { get; }
     public string Name { get; }
+    public ICollection<RecipeJoin> RecipeJoins { get; set; }
     
     // Used for EF Core
     public Ingredient() { }
