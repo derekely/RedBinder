@@ -3,7 +3,7 @@ using RedBinder.Domain.Entities;
 
 namespace RedBinder.Infrastructure.DatabaseContext;
 
-public class DatabaseContext : DbContext
+public class DatabaseContextRedBinder(DbContextOptions<DatabaseContextRedBinder> options) : DbContext(options)
 {
     public DbSet<RecipeJoin> RecipeJoins { get; set; }
     public DbSet<RecipeDetails> RecipeDetails { get; set; }

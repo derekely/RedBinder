@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RedBinder.Application.GetRecipe;
 
-namespace TestingBlazorPages.Controllers
+namespace RedBinder.Controllers
 {
     public class RecipeController(IMediator mediator) : Controller
     {

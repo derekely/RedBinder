@@ -4,7 +4,6 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>TestingBlazorPages</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,6 +14,7 @@
     <ItemGroup>
       <ProjectReference Include="..\RedBinder.Application\RedBinder.Application.csproj" />
       <ProjectReference Include="..\RedBinder.Domain\RedBinder.Domain.csproj" />
+      <ProjectReference Include="..\RedBinder.Infrastructure\RedBinder.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,15 +1,22 @@
-﻿using MediatR;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using RedBinder.Application.ServiceInterface;
-using RedBinder.Domain.Entities;
-using RedBinder.Domain.ValueObjects;
+using RedBinder.Domain.DTOs;
 
 namespace RedBinder.Application.GetRecipe;
-public record GetRecipeQuery(int RecipeId) : IRequest<Result<Recipe>>; 
+public record GetRecipeQuery(int RecipeId) : IRequest<Result<RecipeDto>>; 
 
-public class GetRecipeHandler(IRepositoryService repositoryService) : IRequestHandler<GetRecipeQuery, Result<Recipe>>
+public class GetRecipeHandler(IRepositoryService repositoryService) : IRequestHandler<GetRecipeQuery, Result<RecipeDto>>
 {
-    public async Task<Result<Recipe>> Handle(GetRecipeQuery request, CancellationToken cancellationToken) => await repositoryService.GetRecipeAsync(request.RecipeId);
+    ShoppingItemDto _shoppingItemDto = new ShoppingItemDto(new IngredientDto(1, "Name"),
+        [new MeasurementDto(1, "Name", 12)]);
+    
+    public async Task<Result<RecipeDto>> Handle(GetRecipeQuery request, CancellationToken cancellationToken) => 
+    await Task.FromResult(Result.Success(new RecipeDto(new RecipeDetailsDto(1, "Name", "Directions", "Description"), [_shoppingItemDto])));    
+    // await repositoryService.GetRecipeAsync(request.RecipeId)
+        //     .Map(recipe => new RecipeDto(new RecipeDetailsDto(recipe.RecipeDetails), recipe.ShoppingItems.Select(item => new ShoppingItemDto(item)).ToList()));
 }

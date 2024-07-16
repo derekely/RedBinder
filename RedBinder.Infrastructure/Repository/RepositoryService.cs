@@ -4,21 +4,40 @@ using System.Linq;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using RedBinder.Application.ServiceInterface;
 using RedBinder.Domain.Entities;
 using RedBinder.Domain.ValueObjects;
 using RedBinder.Infrastructure.DatabaseContext;
 
-namespace RedBinder.Infrastructure.RepositoryService;
+namespace RedBinder.Infrastructure.Repository;
 
-public class RepositoryService(DatabaseContext.DatabaseContext databaseContext) : IRepositoryService
+public class RepositoryService(DatabaseContextRedBinder databaseContext) : IRepositoryService
 {
     // Done
-    public async Task<Result<List<RecipeDetails>>> GetRecipesAsync() =>
-        await GetFromDatabaseAsync(context => context.RecipeDetails
+    private List<RecipeDetails> _testRecipeDetails = new()
+    {
+        new RecipeDetails
+        {
+            Id = 1,
+            Name = "Test1",
+            Directions = "Test1",
+            Description = "It WORKED!!!!!"
+        },
+        new RecipeDetails
+        {
+            Id = 2,
+            Name = "Test2",
+            Directions = "Test2",
+            Description = "YEEEEEEESSSSSS!!!!!!!!!!!!!!"
+        }
+    };
+    public async Task<Result<List<RecipeDetails>>> GetRecipesAsync()
+    {
+        return await Task.FromResult(Result.Success(_testRecipeDetails));
+        return await GetFromDatabaseAsync(context => context.RecipeDetails
                 .ToListAsync(), e => e.ToString())
             .Bind(maybeRecipeDetails => maybeRecipeDetails.ToResult("No recipes found"));
+    }
 
     // Done
     public async Task<Result<ShoppingCart>> GetSelectedRecipesAsync(List<int> recipeIds) =>
@@ -86,24 +105,24 @@ public class RepositoryService(DatabaseContext.DatabaseContext databaseContext) 
             .Combine()
             .Map(iEnum => iEnum.ToList());
     
-    private static DatabaseContext.DatabaseContext GetContext() => new();
+    private static DatabaseContextRedBinder GetContext() => new(new DbContextOptions<DatabaseContextRedBinder>());
 
-    private static async Task<Result> SaveToDatabaseAsync(Func<DatabaseContext.DatabaseContext, Task> query, Func<string, string> errorFormatting)
+    private static async Task<Result> SaveToDatabaseAsync(Func<DatabaseContextRedBinder, Task> query, Func<string, string> errorFormatting)
     {
-        DatabaseContext.DatabaseContext context = GetContext();
+        DatabaseContextRedBinder contextRedBinder = GetContext();
         
         Result<int> queryResult = await Result.Try(async () =>
         {
-            await query(context);
-            return await context.SaveChangesAsync();
+            await query(contextRedBinder);
+            return await contextRedBinder.SaveChangesAsync();
         }, e => errorFormatting(e.ToString())); // TODO: do ToErrorString()
 
-        await context.DisposeAsync();
+        await contextRedBinder.DisposeAsync();
 
         return queryResult;
     }
 
-    private static async Task<Result<Maybe<T>>> GetFromDatabaseAsync<T>(Func<DatabaseContext.DatabaseContext, Task<T>> query, Func<string, string> errorFormatting)
+    private static async Task<Result<Maybe<T>>> GetFromDatabaseAsync<T>(Func<DatabaseContextRedBinder, Task<T>> query, Func<string, string> errorFormatting)
     {
         var context = GetContext();
 

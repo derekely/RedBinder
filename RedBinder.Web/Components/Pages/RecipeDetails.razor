@@ -1,0 +1,39 @@
+@page "/recipe/{RecipeId:int}"
+@using MediatR
+@using RedBinder.Application.GetRecipe
+@inject IMediator Mediator
+
+@code {
+    [Parameter]
+    public int RecipeId { get; set; }
+
+    private RecipeDto? recipeDetails;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Mediator.Send(new GetRecipeQuery(RecipeId));
+        if (result.IsSuccess)
+        {
+            recipeDetails = result.Value;
+        }
+    }
+}
+
+@if (recipeDetails != null)
+{
+    <div class="recipe-details">
+        <h2>@recipeDetails.RecipeDetails.Name</h2>
+        <p>@recipeDetails.RecipeDetails.Description</p>
+        <h3>Ingredients</h3>
+        @foreach (var item in recipeDetails.ShoppingItems)
+        {
+            <p>@item.GetMeasurementString()</p>
+        }
+        <h3>Directions</h3>
+        <p>@recipeDetails.RecipeDetails.Directions</p>
+    </div>
+}
+else
+{
+    <p>Loading recipe details...</p>
+}

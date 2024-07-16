@@ -1,0 +1,25 @@
+@inject NavigationManager NavigationManager
+
+<table class="table">
+    @foreach (var recipe in Recipes)
+    {
+        <tr>
+            <td>@recipe.Id</td>
+            <td>
+                <a class="btn btn-primary" href="recipe/@recipe.Id">@recipe.Name</a>
+            </td>
+            <td>@recipe.Description</td>
+            <td><button class="btn btn-primary">Add</button></td>
+        </tr>
+    }
+</table>
+
+@code {
+    [Parameter]
+    public List<RecipeDetailsDto>? Recipes { get; set; }
+
+    void NavigateToRecipe(int recipeId)
+    {
+        NavigationManager.NavigateTo($"/recipe/{recipeId}");
+    }
+}

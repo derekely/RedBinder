@@ -12,14 +12,13 @@ public class RecipeDetails
         Description = description;
     }
     
-    public int Id { get; set; }
-    public int RecipeId { get; set; }
-    public string Name { get; set; }
-    public string Directions { get; set; }
-    public string Description { get; set; }
-    public ICollection<RecipeJoin> RecipeJoins { get; set; }
+    public int Id { get; init; }
+    public string Name { get; init; }
+    public string Directions { get; init; }
+    public string Description { get; init; }
     
-    // Used for EF Core
+    // Used by EF Core
+    public ICollection<RecipeJoin> RecipeJoins { get; init; }
     public RecipeDetails() { }
     
     public static Result<RecipeDetails> Create(string name, string directions, string description) =>
