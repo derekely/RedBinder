@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
+using RedBinder.Domain.DTOs;
 
 namespace RedBinder.Domain.Entities;
 
@@ -23,4 +24,6 @@ public record Measurement
         Result.SuccessIf(!string.IsNullOrEmpty(name), "Name cannot be null")
             .Ensure(() => quantity > 0, "Quantity must be greater than 0")
             .Map(() => new Measurement(name, quantity));
+    
+    public Measurement ToMeasurementFromDto(MeasurementDto measurementDto) => new(measurementDto.Name, measurementDto.Quantity);
 }

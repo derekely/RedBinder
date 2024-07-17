@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpFunctionalExtensions;
+using RedBinder.Domain.DTOs;
 using RedBinder.Domain.Entities;
 
 namespace RedBinder.Domain.ValueObjects;
@@ -30,4 +31,7 @@ public record ShoppingItem(Ingredient Ingredient, List<Measurement> Measurements
         Measurements.Count == 1 
             ? $"{Measurements.First().Quantity} {Measurements.First().Name} of {Ingredient.Name}" 
             : $"{string.Join(", ", Measurements.Select(measurement => $"{measurement.Quantity} {measurement.Name}"))} of {Ingredient.Name}";
+    
+    public static ShoppingItem ToShoppingItemFromDto(ShoppingItemDto shoppingItemDto) => new(new Ingredient().ToIngredientFromDto(shoppingItemDto.IngredientDto),
+        shoppingItemDto.MeasurementsDto.Select(measurementDto => new Measurement().ToMeasurementFromDto(measurementDto)).ToList()); 
 }

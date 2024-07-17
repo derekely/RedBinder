@@ -4,13 +4,16 @@ using RedBinder.Domain.ValueObjects;
 
 namespace RedBinder.Domain.DTOs;
 
-public class ShoppingItemDto(IngredientDto IngredientDto, List<MeasurementDto> MeasurementsDto)
+public class ShoppingItemDto(IngredientDto ingredientDto, List<MeasurementDto> measurementsDto)
 {
+    public IngredientDto IngredientDto => ingredientDto;
+    public List<MeasurementDto> MeasurementsDto => measurementsDto;
+    
     public ShoppingItemDto(ShoppingItem shoppingItem) : this(new IngredientDto(shoppingItem.Ingredient),
         shoppingItem.Measurements.Select(measurement => new MeasurementDto(measurement)).ToList()) { }
 
     public string GetMeasurementString() =>
-        MeasurementsDto.Count == 1 
-            ? $"{MeasurementsDto.First().Quantity} {MeasurementsDto.First().Name} of {IngredientDto.Name}" 
-            : $"{string.Join(", ", MeasurementsDto.Select(measurement => $"{measurement.Quantity} {measurement.Name}"))} of {IngredientDto.Name}";
+        measurementsDto.Count == 1 
+            ? $"{measurementsDto.First().Quantity} {measurementsDto.First().Name} of {ingredientDto.Name}" 
+            : $"{string.Join(", ", measurementsDto.Select(measurement => $"{measurement.Quantity} {measurement.Name}"))} of {ingredientDto.Name}";
 }

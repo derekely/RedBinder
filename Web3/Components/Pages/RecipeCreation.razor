@@ -1,0 +1,106 @@
+@page "/recipe-creation"
+@using CSharpFunctionalExtensions
+@using RedBinder.Web.Models
+@using MediatR
+@using RedBinder.Application.CreateRecipe
+@inject IMediator Mediator
+@rendermode InteractiveServer
+
+<PageTitle>RecipeCreation</PageTitle>
+
+<div class="form-floaring mb-3">
+    <input type="text" class="form-control" placeholder="Name" @bind="Recipe.Name" />
+    <br/>
+    <textarea class="form-control" placeholder="Description" style="height: 100px" @bind="Recipe.Description"></textarea>
+    <br/>
+    
+    @foreach (var ingredient in Ingredients)
+    {
+        <div class="row">
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Ingredient" @bind="ingredient.Name" />
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Measurement" @bind="ingredient.Measurement" />
+            </div>
+            <div class="col">
+                <input type="number" class="form-control" placeholder="Quantity" @bind="ingredient.Quantity" />
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary" @onclick="AddNewIngredient">+</button>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" @onclick="RemoveNewIngredient">-</button>
+        </div>
+        <br/>
+    </div>
+    
+    <textarea class="form-control" placeholder="Directions" style="height: 300px" @bind="Recipe.Directions"></textarea>
+    <br/>
+    <button class="btn btn-primary" @onclick="CreateRecipe">Create</button>
+</div>
+
+
+@if (_creationResult is { HasValue: true, Value.IsSuccess: true })
+{
+    <div class="alert alert-success" role="alert">"Recipe created successfully"</div>
+}
+else if (_creationResult is { HasValue: true, Value.IsFailure: true })
+{
+    <div class="alert alert-danger" role="alert">"Error creating recipe: @_creationResult.Value.Error"</div>
+}
+else 
+{
+
+}
+
+@code 
+{
+    private RecipeModel _recipe = new();
+    
+    private List<ShoppingItemModel> _ingredients = [];
+    
+    private Maybe<Result> _creationResult = Maybe<Result>.None;
+
+    protected override void OnInitialized()
+    {
+        Ingredients.Add(new ShoppingItemModel());
+    }
+
+    public RecipeModel Recipe
+    {
+        get => _recipe;
+        set
+        {
+            if (_recipe == value) return;
+            _recipe = value;
+        }
+    }
+    
+    public List<ShoppingItemModel> Ingredients
+    {
+        get => _ingredients;
+        set
+        {
+            if (_ingredients == value) return;
+            _ingredients = value;
+        }
+    }
+    
+    private void AddNewIngredient() => Ingredients.Add(new ShoppingItemModel());
+    
+    private void RemoveNewIngredient()
+    {
+         if (Ingredients.Count > 1) Ingredients.Remove(Ingredients.Last());
+    }
+
+    private async Task CreateRecipe()
+    {
+        var recipeDto = _recipe.ToDtoFromCreationModel(_ingredients);
+        
+        _creationResult = Maybe.From(await Mediator.Send(new RecipeCreationRequest(recipeDto)));
+    }
+}

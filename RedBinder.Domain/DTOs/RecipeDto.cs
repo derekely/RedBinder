@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using RedBinder.Domain.ValueObjects;
 
 namespace RedBinder.Domain.DTOs;
 

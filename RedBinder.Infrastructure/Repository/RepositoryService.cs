@@ -14,26 +14,9 @@ namespace RedBinder.Infrastructure.Repository;
 public class RepositoryService(DatabaseContextRedBinder databaseContext) : IRepositoryService
 {
     // Done
-    private List<RecipeDetails> _testRecipeDetails = new()
-    {
-        new RecipeDetails
-        {
-            Id = 1,
-            Name = "Test1",
-            Directions = "Test1",
-            Description = "It WORKED!!!!!"
-        },
-        new RecipeDetails
-        {
-            Id = 2,
-            Name = "Test2",
-            Directions = "Test2",
-            Description = "YEEEEEEESSSSSS!!!!!!!!!!!!!!"
-        }
-    };
     public async Task<Result<List<RecipeDetails>>> GetRecipesAsync()
     {
-        return await Task.FromResult(Result.Success(_testRecipeDetails));
+        // return await Task.FromResult(Result.Success(_testRecipeDetails));
         return await GetFromDatabaseAsync(context => context.RecipeDetails
                 .ToListAsync(), e => e.ToString())
             .Bind(maybeRecipeDetails => maybeRecipeDetails.ToResult("No recipes found"));

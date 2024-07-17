@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
+using RedBinder.Domain.DTOs;
 
 namespace RedBinder.Domain.Entities;
 
@@ -20,4 +21,6 @@ public class Ingredient
     public static Result<Ingredient> Create(string name) =>
         Result.SuccessIf(!string.IsNullOrEmpty(name), "Name cannot be null")
             .Map(() => new Ingredient(name));
+    
+    public Ingredient ToIngredientFromDto(IngredientDto ingredientDto) => new(ingredientDto.Name);
 }

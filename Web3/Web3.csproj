@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>Redbinder.Web3</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MediatR" Version="12.2.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\RedBinder.Application\RedBinder.Application.csproj" />
+        <ProjectReference Include="..\RedBinder.Domain\RedBinder.Domain.csproj" />
+        <ProjectReference Include="..\RedBinder.Infrastructure\RedBinder.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Tables\RecipesTable.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="RedBinder.Web">
+        <HintPath>..\RedBinder.Web\bin\Debug\net8.0\RedBinder.Web.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+    
+    
+</Project>

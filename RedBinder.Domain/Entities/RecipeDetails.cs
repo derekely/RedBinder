@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
+using RedBinder.Domain.DTOs;
 
 namespace RedBinder.Domain.Entities;
 
@@ -26,4 +27,6 @@ public class RecipeDetails
             .Ensure(() => !string.IsNullOrEmpty(directions), "Directions cannot be null")
             .Ensure(() => !string.IsNullOrEmpty(description), "Description cannot be null")
             .Map(() => new RecipeDetails(name, directions, description));
+    
+    public static RecipeDetails ToRecipeDetailsFromDto(RecipeDetailsDto recipeDetailsDto) => new (recipeDetailsDto.Name, recipeDetailsDto.Directions, recipeDetailsDto.Description);
 }
