@@ -1,12 +1,13 @@
+using System;
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using RedBinder.Domain.DTOs;
 
 namespace RedBinder.Domain.Entities;
 
-public class RecipeDetails
+public class RecipeOverview
 {
-    private RecipeDetails(string name, string directions, string description)
+    private RecipeOverview(string name, string directions, string description)
     {
         Name = name;
         Directions = directions;
@@ -19,14 +20,20 @@ public class RecipeDetails
     public string Description { get; init; }
     
     // Used by EF Core
+    public RecipeOverview() { }
     public ICollection<RecipeJoin> RecipeJoins { get; init; }
-    public RecipeDetails() { }
     
-    public static Result<RecipeDetails> Create(string name, string directions, string description) =>
+    public static Result<RecipeOverview> Create(string name, string directions, string description) =>
         Result.SuccessIf(!string.IsNullOrEmpty(name), "Name cannot be null")
             .Ensure(() => !string.IsNullOrEmpty(directions), "Directions cannot be null")
             .Ensure(() => !string.IsNullOrEmpty(description), "Description cannot be null")
-            .Map(() => new RecipeDetails(name, directions, description));
+            .Map(() => new RecipeOverview(name, directions, description));
     
-    public static RecipeDetails ToRecipeDetailsFromDto(RecipeDetailsDto recipeDetailsDto) => new (recipeDetailsDto.Name, recipeDetailsDto.Directions, recipeDetailsDto.Description);
+    public static RecipeOverview ToRecipeDetailsFromDto(RecipeOverviewDto recipeOverviewDto) => new (recipeOverviewDto.Name, recipeOverviewDto.Directions, recipeOverviewDto.Description);
+}
+
+public class RecipeOverviewEqualityComparer : IEqualityComparer<RecipeOverview>
+{
+    public bool Equals(RecipeOverview? x, RecipeOverview? y) => x?.Name == y?.Name;
+    public int GetHashCode(RecipeOverview obj) => obj.Name.GetHashCode();
 }

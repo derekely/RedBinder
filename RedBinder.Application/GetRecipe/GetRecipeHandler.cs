@@ -16,7 +16,7 @@ public class GetRecipeHandler(IRepositoryService repositoryService) : IRequestHa
         [new MeasurementDto(1, "Name", 12)]);
     
     public async Task<Result<RecipeDto>> Handle(GetRecipeQuery request, CancellationToken cancellationToken) => 
-    await Task.FromResult(Result.Success(new RecipeDto(new RecipeDetailsDto(1, "Name", "Directions", "Description"), [_shoppingItemDto])));    
-    // await repositoryService.GetRecipeAsync(request.RecipeId)
-        //     .Map(recipe => new RecipeDto(new RecipeDetailsDto(recipe.RecipeDetails), recipe.ShoppingItems.Select(item => new ShoppingItemDto(item)).ToList()));
+    // await Task.FromResult(Result.Success(new RecipeDto(new RecipeOverviewDto(1, "Name", "Directions", "Description"), [_shoppingItemDto])));    
+    await repositoryService.GetRecipeAsync(request.RecipeId)
+            .Map(recipe => new RecipeDto(new RecipeOverviewDto(recipe.RecipeOverview), recipe.ShoppingItems.Select(item => new ShoppingItemDto(item)).ToList()));
 }

@@ -32,6 +32,6 @@ public record ShoppingItem(Ingredient Ingredient, List<Measurement> Measurements
             ? $"{Measurements.First().Quantity} {Measurements.First().Name} of {Ingredient.Name}" 
             : $"{string.Join(", ", Measurements.Select(measurement => $"{measurement.Quantity} {measurement.Name}"))} of {Ingredient.Name}";
     
-    public static ShoppingItem ToShoppingItemFromDto(ShoppingItemDto shoppingItemDto) => new(new Ingredient().ToIngredientFromDto(shoppingItemDto.IngredientDto),
+    public static ShoppingItem ToShoppingItemFromDto(ShoppingItemDto shoppingItemDto) => new(Ingredient.ToIngredientFromDto(shoppingItemDto.IngredientDto),
         shoppingItemDto.MeasurementsDto.Select(measurementDto => new Measurement().ToMeasurementFromDto(measurementDto)).ToList()); 
 }

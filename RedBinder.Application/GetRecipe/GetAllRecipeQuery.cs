@@ -9,11 +9,11 @@ using RedBinder.Domain.DTOs;
 
 namespace RedBinder.Application.GetRecipe;
 
-public record GetAllRecipeQuery : IRequest<Result<List<RecipeDetailsDto>>>;
+public record GetAllRecipeQuery : IRequest<Result<List<RecipeOverviewDto>>>;
 
-public class GetAllRecipeHandler(IRepositoryService repositoryService) : IRequestHandler<GetAllRecipeQuery, Result<List<RecipeDetailsDto>>>
+public class GetAllRecipeHandler(IRepositoryService repositoryService) : IRequestHandler<GetAllRecipeQuery, Result<List<RecipeOverviewDto>>>
 {
-    public async Task<Result<List<RecipeDetailsDto>>> Handle(GetAllRecipeQuery request, CancellationToken cancellationToken) =>
+    public async Task<Result<List<RecipeOverviewDto>>> Handle(GetAllRecipeQuery request, CancellationToken cancellationToken) =>
         await repositoryService.GetRecipesAsync()
-            .Map(recipes => recipes.Select(recipe => new RecipeDetailsDto(recipe)).ToList());
+            .Map(recipes => recipes.Select(recipe => new RecipeOverviewDto(recipe)).ToList());
 }

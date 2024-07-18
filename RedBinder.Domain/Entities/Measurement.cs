@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using RedBinder.Domain.DTOs;
@@ -12,13 +13,13 @@ public record Measurement
         Quantity = quantity;
     }
     
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public double Quantity { get; set; }
-    public ICollection<RecipeJoin> RecipeJoins { get; set; }
+    public int Id { get; init; }
+    public string Name { get; init; }
+    public double Quantity { get; init; }
     
     // Used for EF Core
     public Measurement() { }
+    public ICollection<RecipeJoin> RecipeJoins { get; init; }
     
     public static Result<Measurement> Create(string name, double quantity) => 
         Result.SuccessIf(!string.IsNullOrEmpty(name), "Name cannot be null")
@@ -26,4 +27,10 @@ public record Measurement
             .Map(() => new Measurement(name, quantity));
     
     public Measurement ToMeasurementFromDto(MeasurementDto measurementDto) => new(measurementDto.Name, measurementDto.Quantity);
+}
+
+public class MeasurementEqualityComparer : IEqualityComparer<Measurement>
+{
+    public bool Equals(Measurement? x, Measurement? y) => x?.Name == y?.Name;
+    public int GetHashCode(Measurement obj) => obj.Name.GetHashCode();
 }

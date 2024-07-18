@@ -7,7 +7,7 @@ public static class TranslationExtensions
 {
     public static RecipeDto ToDtoFromCreationModel(this RecipeModel model, List<ShoppingItemModel> shoppingItemsModel)
     {
-        RecipeDetailsDto recipeDetailsDto = new(0 ,model.Name, model.Directions, model.Description);
+        RecipeOverviewDto recipeOverviewDto = new(0 ,model.Name, model.Directions, model.Description);
         
         List<ShoppingItemDto> shoppingItemsDto = shoppingItemsModel.Select(x =>
         {
@@ -16,6 +16,6 @@ public static class TranslationExtensions
             return new ShoppingItemDto(ingredientDto, [measurementDto]);
         }).ToList();
 
-        return new RecipeDto(recipeDetailsDto, shoppingItemsDto);
+        return new RecipeDto(recipeOverviewDto, shoppingItemsDto);
     }
 }

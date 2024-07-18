@@ -1,38 +1,119 @@
 @page "/recipe/{RecipeId:int}"
+@using CSharpFunctionalExtensions
 @using MediatR
 @using RedBinder.Application.GetRecipe
+@using RedBinder.Application.UpdateRecipe
 @using RedBinder.Domain.DTOs
+@using RedBinder.Web.Models
 @inject IMediator Mediator
+@rendermode InteractiveServer
 
 @code {
     [Parameter]
     public int RecipeId { get; set; }
 
+    private bool isEditing = false;
+    
+    private List<ShoppingItemModel> _shoppingItems = new();
+
+    Result<RecipeDto> GetRecipeResult;
+    
     private RecipeDto? recipeDetails;
 
+    private RecipeModel _updatedRecipeModel = new();
+    
     protected override async Task OnInitializedAsync()
     {
-        var result = await Mediator.Send(new GetRecipeQuery(RecipeId));
-        if (result.IsSuccess)
+        GetRecipeResult = await Mediator.Send(new GetRecipeQuery(RecipeId));
+        if (GetRecipeResult.IsSuccess)
         {
-            recipeDetails = result.Value;
+            recipeDetails = GetRecipeResult.Value;
+            _updatedRecipeModel = RecipeModel.FromDto(recipeDetails.RecipeOverview);
+            _shoppingItems = recipeDetails.ShoppingItems.Select(ShoppingItemModel.FromDto).ToList();
         }
+        
+        
+    }
+
+    private void ToggleEditMode()
+    {
+        isEditing = !isEditing;
+    }
+    
+    private Task UpdateRecipe()
+    {
+        var updatedRecipe = _updatedRecipeModel.ToDtoFromCreationModel(_shoppingItems);
+        
+        return Mediator.Send(new UpdateRecipeCommand(updatedRecipe));
+    }
+    
+    private void AddNewIngredient() => _shoppingItems.Add(new ShoppingItemModel());
+    
+    private void RemoveNewIngredient()
+    {
+        if (_shoppingItems.Count > 1) _shoppingItems.Remove(_shoppingItems.Last());
     }
 }
 
 @if (recipeDetails != null)
 {
-    <div class="recipe-details">
-        <h2>@recipeDetails.RecipeDetails.Name</h2>
-        <p>@recipeDetails.RecipeDetails.Description</p>
-        <h3>Ingredients</h3>
-        @foreach (var item in recipeDetails.ShoppingItems)
-        {
-            <p>@item.GetMeasurementString()</p>
-        }
-        <h3>Directions</h3>
-        <p>@recipeDetails.RecipeDetails.Directions</p>
+    <div class="row">
+        <div class="col align-self-end">
+            <button class="btn btn-outline-primary" @onclick="ToggleEditMode">Edit</button>
+        </div>
     </div>
+    <div class="recipe-details">
+        <h3>Recipe Name</h3>
+        <input type="text" class="form-control" disabled="@(!isEditing)" @bind="_updatedRecipeModel.Name" placeholder="Recipe Name">
+        <h3>Description</h3>
+        <textarea class="form-control" style="height: 100px" disabled="@(!isEditing)" @bind="_updatedRecipeModel.Description" placeholder="@recipeDetails.RecipeOverview.Description"></textarea>
+        <h3>Ingredients</h3>
+        @if (isEditing == false)
+        {
+            foreach (var item in recipeDetails.ShoppingItems)
+            {
+                <p>@item.GetMeasurementString()</p>
+            }
+        }
+        else
+        {
+            @foreach (var ingredient in _shoppingItems)
+            {
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Ingredient" @bind="ingredient.Name" />
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" placeholder="Quantity" @bind="ingredient.Quantity" />
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Measurement" @bind="ingredient.Measurement" />
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-primary" @onclick="AddNewIngredient">+</button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" @onclick="RemoveNewIngredient">-</button>
+                </div>
+                <br/>
+            </div>
+        }
+        
+        <h3>Directions</h3>
+        <textarea class="form-control" disabled="@(!isEditing)" style="height: 300px">@recipeDetails.RecipeOverview.Directions</textarea>
+    </div>
+    
+    @if (isEditing)
+    {
+        <button class="btn btn-primary" @onclick="() => { UpdateRecipe(); ToggleEditMode(); }">Update</button>
+    }
+}
+else if (GetRecipeResult.IsFailure)
+{
+    <p>Failed to load recipe details: @GetRecipeResult.Error</p>
 }
 else
 {

@@ -8,7 +8,7 @@ namespace RedBinder.Application.ServiceInterface;
 
 public interface IRepositoryService
 {
-    public Task<Result<List<RecipeDetails>>> GetRecipesAsync();
+    public Task<Result<List<RecipeOverview>>> GetRecipesAsync();
     public Task<Result<ShoppingCart>> GetSelectedRecipesAsync(List<int> recipeIds);
     public Task<Result<Recipe>> GetRecipeAsync(int recipeId);
     public Task<Result> CreateRecipeAsync(Recipe recipe);

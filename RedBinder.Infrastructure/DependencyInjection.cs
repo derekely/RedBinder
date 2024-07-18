@@ -12,7 +12,9 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<DatabaseContextRedBinder>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("Server=localhost\\SQLEXPRESS;Database=master;Trusted_Connection=True;")));
+            options.UseSqlServer("Server=localhost\\SQLEXPRESS01;Database=RedBinder;Trusted_Connection=True;TrustServerCertificate=True;User Id=dbo;"
+                , b => b.MigrationsAssembly(typeof(DatabaseContextRedBinder).Assembly.FullName)
+                    .MigrationsHistoryTable("__EFMigrationsHistory", DatabaseContextRedBinder.SchemaName)));
 
         services.AddScoped<IRepositoryService, RepositoryService>();
         
