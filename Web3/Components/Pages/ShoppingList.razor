@@ -3,6 +3,7 @@
 @using RedBinder.Application.ShoppingList
 @using RedBinder.Domain.ValueObjects
 @using Redbinder.Web3.StaticObjects
+@rendermode InteractiveServer
 @inject IMediator Mediator
 @inject ShoppingListState ShoppingListState
 
@@ -13,11 +14,6 @@
 @if (_shoppingCart == null)
 {
     <p>Loading...</p>
-    @foreach (var id in ShoppingListState.RecipeIds)
-    {
-        <p>@id</p>
-    }
-    
 }
 else
 {
@@ -28,6 +24,8 @@ else
             <li>@item.GetMeasurementString()</li>
         }
     </ul>
+    
+    <button class="btn-outline-danger" @onclick="ClearShoppingList">Clear</button>
 }
 
 @if (fetchResult is { IsFailure: true, Error: not null })
@@ -49,9 +47,13 @@ else
             _shoppingCart = shoppingCartResult.Value;
         }
         
-        
         base.OnInitialized();
     }
-
+    
+    private void ClearShoppingList()
+    {
+        ShoppingListState.ClearRecipeIds();
+        _shoppingCart = null;
+    }
 
 }

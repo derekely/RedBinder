@@ -12,5 +12,8 @@ public record GetShoppingListQuery(List<int> SelectedRecipes) : IRequest<Result<
 
 public class GetShoppingListHandler(IRepositoryService repositoryService) : IRequestHandler<GetShoppingListQuery, Result<ShoppingCart>>
 {
-    public async Task<Result<ShoppingCart>> Handle(GetShoppingListQuery request, CancellationToken cancellationToken) => await repositoryService.GetSelectedRecipesAsync(request.SelectedRecipes);
+    public async Task<Result<ShoppingCart>> Handle(GetShoppingListQuery request, CancellationToken cancellationToken)
+    {
+        return await repositoryService.GetSelectedRecipesAsync(request.SelectedRecipes);
+    }
 }

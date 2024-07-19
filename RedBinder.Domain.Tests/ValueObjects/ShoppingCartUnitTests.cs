@@ -40,7 +40,7 @@ public class ShoppingCartUnitTests
         ImmutableList<ShoppingItem> expectedShoppingItems = [TomatoSI(1, "kg"), CheeseSI(3, "lbs")];
         
         // Act
-        Result<ShoppingCart> newShoppingCart = existingShoppingCart.AddItem(Cheese, Measurement.Create("lbs", 3).Value);
+        Result<ShoppingCart> newShoppingCart = existingShoppingCart.ShoppingItems.AddItem(Cheese, Measurement.Create("lbs", 3).Value);
         
         // Assert
         newShoppingCart.Should().Succeed();
@@ -55,7 +55,7 @@ public class ShoppingCartUnitTests
         ImmutableList<ShoppingItem> expectedShoppingItems = [new ShoppingItem(Tomato, [Measurement.Create("kg", 1).Value, Measurement.Create("lbs", 2).Value])];
         
         // Act
-        Result<ShoppingCart> newShoppingCart = existingCart.AddItem(Tomato, Measurement.Create("lbs", 2).Value);
+        Result<ShoppingCart> newShoppingCart = existingCart.ShoppingItems.AddItem(Tomato, Measurement.Create("lbs", 2).Value);
         
         // Assert
         newShoppingCart.Should().Succeed();
@@ -71,7 +71,7 @@ public class ShoppingCartUnitTests
         ImmutableList<ShoppingItem> expectedShoppingItems = [TomatoSI(3, "kg")];
         
         // Act
-        Result<ShoppingCart> newShoppingCart = existingCart.AddItem(Tomato, Measurement.Create("kg", 2).Value);
+        Result<ShoppingCart> newShoppingCart = existingCart.ShoppingItems.AddItem(Tomato, Measurement.Create("kg", 2).Value);
         
         // Assert
         newShoppingCart.Should().Succeed();
