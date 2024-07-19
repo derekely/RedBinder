@@ -1,0 +1,57 @@
+@using CSharpFunctionalExtensions
+@using MediatR
+@using RedBinder.Application.ShoppingList
+@using RedBinder.Domain.ValueObjects
+@using Redbinder.Web3.StaticObjects
+@inject IMediator Mediator
+@inject ShoppingListState ShoppingListState
+
+@page "/shopping-list"
+
+<PageTitle>Shopping List</PageTitle>
+
+@if (_shoppingCart == null)
+{
+    <p>Loading...</p>
+    @foreach (var id in ShoppingListState.RecipeIds)
+    {
+        <p>@id</p>
+    }
+    
+}
+else
+{
+    <h1>Shopping List</h1>
+    <ul>
+        @foreach (var item in _shoppingCart.ShoppingItems)
+        {
+            <li>@item.GetMeasurementString()</li>
+        }
+    </ul>
+}
+
+@if (fetchResult is { IsFailure: true, Error: not null })
+{
+    <div class="alert alert-danger" role="alert">"Error loading shopping list: @fetchResult.Error"</div>
+}
+
+
+@code {
+    private ShoppingCart _shoppingCart { get; set; }
+    Result fetchResult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var shoppingCartResult = await Mediator.Send(new GetShoppingListQuery(ShoppingListState.RecipeIds));
+        
+        if (shoppingCartResult.IsSuccess)
+        {
+            _shoppingCart = shoppingCartResult.Value;
+        }
+        
+        
+        base.OnInitialized();
+    }
+
+
+}

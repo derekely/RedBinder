@@ -47,43 +47,38 @@ public class RepositoryService(DbContextOptions options) : IRepositoryService
     //Confirmed works
     public async Task<Result> CreateRecipeAsync(Recipe recipe)
     {
-        return await Result.Try(async () =>
+        // Save the RecipeOverview
+        return await SaveToDatabaseAsync(async context =>
         {
-            var context = new DatabaseContextRedBinder(_options);
-            await using(context)
+            await context.RecipeOverviews.AddAsync(recipe.RecipeOverview);
+            recipe.ShoppingItems.ForEach(si =>
             {
-                var recipeJoinsResult = await EnsureEntityExistsByPropertyAsync(context.RecipeOverviews, recipe.RecipeOverview, nameof(RecipeOverview.Name), recipe.RecipeOverview.Name)
-                    .Bind(recipeOverview => recipe.ShoppingItems.Select(async item =>
-                    {
-                         return await EnsureEntityExistsByPropertyAsync(context.Ingredients, item.Ingredient, nameof(Ingredient.Name), item.Ingredient.Name)
-                            .Bind(ingredient => EnsureEntityExistsByPropertyAsync(context.Measurements, item.Measurements.First(), nameof(Measurement.Name), item.Measurements.First().Name)
-                                .Map(measurement => new RecipeJoin
-                                {
-                                    RecipeOverview = recipeOverview,
-                                    Ingredient = ingredient,
-                                    Measurement = measurement
-                                }));
-                    }).Combine("|"))
-                    .Tap(recipeJoins => context.RecipeJoins.AddRangeAsync(recipeJoins));
-                await context.SaveChangesAsync();
-                return recipeJoinsResult;
-            }      
-        });
+                context.Measurements.AddAsync(si.Measurements.First());
+                context.Ingredients.AddAsync(si.Ingredient);
+                
+                var recipeJoin = new RecipeJoin
+                {
+                    RecipeOverview = recipe.RecipeOverview,
+                    Ingredient = si.Ingredient,
+                    Measurement = si.Measurements.First()
+                };
+                
+                context.RecipeJoins.AddAsync(recipeJoin);
+            });
+        }, e => e.ToString());
     }
 
-    public async Task<Result> UpdateRecipeAsync(Recipe recipe) =>
-        await EnsureRecipeDetailsAsync(recipe.RecipeOverview)
-            .Bind(recipeDetails => recipe.ShoppingItems.Select(SaveShoppingItem).Combine()
-                .Bind(iAndMs => SaveToDatabaseAsync(async context =>
-                {
-                    context.RecipeJoins.RemoveRange(context.RecipeJoins.Where(rj => rj.RecipeOverviewId == recipeDetails.Id));
-                    await context.RecipeJoins.AddRangeAsync(iAndMs.Select(ingAndMeas => new RecipeJoin
-                    {
-                        RecipeOverview = recipeDetails,
-                        Ingredient = ingAndMeas.ingredient,
-                        Measurement = ingAndMeas.measurement
-                    }));
-                }, e => e.ToString())));
+    public async Task<Result> UpdateRecipeAsync(Recipe sourceRecipe)
+    {
+        return await GetRecipeAsync(sourceRecipe.RecipeOverview.Id)
+            .Bind(destinationRecipe => SaveToDatabaseAsync(context =>
+            {
+                context.RecipeJoins.RemoveRange(context.RecipeJoins.Where(rj =>
+                    rj.RecipeOverviewId == destinationRecipe.RecipeOverview.Id));
+                return Task.CompletedTask;
+            }, e => e.ToString()))
+            .Bind(() => CreateRecipeAsync(sourceRecipe));
+    }
 
     public async Task<Result> DeleteRecipeAsync(int recipeId) =>
         await SaveToDatabaseAsync(context =>
@@ -97,25 +92,6 @@ public class RepositoryService(DbContextOptions options) : IRepositoryService
     #region Private Methods
     
     // Generic method to check if an entity exists and add or update accordingly
-    private async Task<Result<T>> EnsureEntityExistsByPropertyAsync<T>(DbSet<T> dbSet, T entity, string propertyName,string entityName) where T : class
-    {
-        return await Result.Try(async () =>
-        {
-            var context = new DatabaseContextRedBinder(_options);
-            var existingEntity = await dbSet.FirstOrDefaultAsync(dbEntity => EF.Property<string>(dbEntity, propertyName) == entityName);
-            if (existingEntity == null)
-            {
-                dbSet.Add(entity);
-            }
-            else
-            {
-                context.Entry(existingEntity).CurrentValues.SetValues(entity);
-            }
-            await context.SaveChangesAsync();
-            await context.DisposeAsync();
-            return entity;
-        }, e => e.ToString());
-    }
     
     private static Result<List<Recipe>> TranslateToRecipesFromRecipeJoin(List<RecipeJoin> recipeJoins) =>
         recipeJoins.Select(rj => ShoppingItem.Create(rj.Ingredient, [rj.Measurement])

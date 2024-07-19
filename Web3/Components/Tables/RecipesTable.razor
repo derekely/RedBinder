@@ -1,26 +1,19 @@
 @using RedBinder.Domain.DTOs
-@inject NavigationManager NavigationManager
+@using Redbinder.Web3.StaticObjects
+@* @rendermode InteractiveServer *@
 
-<table class="table">
-    @foreach (var recipe in Recipes)
-    {
-        <tr>
-            <td>@recipe.Id</td>
-            <td>
-                <a class="btn btn-primary" href="recipe/@recipe.Id">@recipe.Name</a>
-            </td>
-            <td>@recipe.Description</td>
-            <td><button class="btn btn-primary">Add</button></td>
-        </tr>
-    }
-</table>
+
+
+
 
 @code {
     [Parameter]
     public List<RecipeOverviewDto>? Recipes { get; set; }
-
-    void NavigateToRecipe(int recipeId)
+    
+    
+    
+    void DisplayDeleteRecipeModal(RecipeOverviewDto recipe)
     {
-        NavigationManager.NavigateTo($"/recipe/{recipeId}");
+        
     }
 }

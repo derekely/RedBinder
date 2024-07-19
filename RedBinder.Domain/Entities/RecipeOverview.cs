@@ -31,9 +31,3 @@ public class RecipeOverview
     
     public static RecipeOverview ToRecipeDetailsFromDto(RecipeOverviewDto recipeOverviewDto) => new (recipeOverviewDto.Name, recipeOverviewDto.Directions, recipeOverviewDto.Description);
 }
-
-public class RecipeOverviewEqualityComparer : IEqualityComparer<RecipeOverview>
-{
-    public bool Equals(RecipeOverview? x, RecipeOverview? y) => x?.Name == y?.Name;
-    public int GetHashCode(RecipeOverview obj) => obj.Name.GetHashCode();
-}
